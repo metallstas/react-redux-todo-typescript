@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react"
-import { useAppDispatch } from "../hooks"
-import { addTodo } from "../store/todoSlice"
+import { useAppDispatch, useAppSelector } from "../hooks"
+import { addTodo, fetchTodos } from "../store/todoSlice"
 import TodoList from "./TodoList"
 
 const App: React.FC = () => {
     const [value, setValue] = useState('')
-
+    const {error, status} = useAppSelector(state => state.todos)
     const dispatch = useAppDispatch()
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -15,10 +15,13 @@ const App: React.FC = () => {
     }
 
     useEffect(() => {
+        dispatch(fetchTodos())
+
         if (inputRef.current) {
             inputRef.current.focus()
         }
-    }, [])
+
+    }, [dispatch])
 
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
         setValue(e.target.value)
@@ -40,6 +43,8 @@ const App: React.FC = () => {
                     ref={inputRef}/>
                 <button onClick={addTask}>Add</button>
             </div>
+            {status === 'loading' && <h2>Loading...</h2>}
+            {error && <h2>An error occurred: {error}</h2>}
             <TodoList />
         </div>
     )
