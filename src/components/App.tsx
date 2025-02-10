@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../hooks"
-import { addTodo, fetchTodos } from "../store/todoSlice"
+import { addNewTodo, fetchTodos } from "../store/todoSlice"
 import TodoList from "./TodoList"
 
 const App: React.FC = () => {
@@ -10,7 +10,7 @@ const App: React.FC = () => {
     const inputRef = useRef<HTMLInputElement>(null)
 
     const addTask = () => {
-        dispatch(addTodo(value))
+        dispatch(addNewTodo(value))
         setValue('')
     }
 
